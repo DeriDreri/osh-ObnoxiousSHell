@@ -18,6 +18,7 @@ debug: $(TARGET_DIR)/$(TARGET)
 	@./$(TARGET_DIR)/$(TARGET)
 
 build: $(TARGET_DIR)/$(TARGET)
+	@cpplint $(SRC)
 
 run: $(TARGET_DIR)/$(TARGET)
 	@./$(TARGET_DIR)/$(TARGET)

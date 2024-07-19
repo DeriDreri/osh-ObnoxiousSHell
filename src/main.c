@@ -3,15 +3,15 @@
 #include <stdio.h>
 #include <string.h>
 
-#define TRUE 1 
+#define TRUE 1
 #define FALSE 0
 
-#ifdef DEBUG 
-  #define DEBUG_PRINT(x) fprintf(stderr, "DEBUG> "); fprintf(stderr,x)
-  #define DEBUG_PRINT2(x,y) fprintf(stderr, "DEBUG> "); fprintf(stderr,x,y)
+#ifdef DEBUG
+  #define DEBUG_PRINT(x) fprintf(stderr, "DEBUG> "); fprintf(stderr, x)
+  #define DEBUG_PRINT2(x, y) fprintf(stderr, "DEBUG> "); fprintf(stderr, x, y)
 #else
   #define DEBUG_PRINT(x) {}
-  #define DEBUG_PRINT2(x,y) {}
+  #define DEBUG_PRINT2(x, y) {}
 #endif
 
 const uint32_t  tokenizer_buffer_chunk_size  = 64;
@@ -25,23 +25,23 @@ char ** oshTokenizeLine(char * line)
   char **   tokens       = malloc(buffer_size * sizeof(char*));
   char *    token;
 
-  if (!tokens) 
+  if (!tokens)
   {
     fprintf(stderr, "lsh: allocation error\n");
     exit(EXIT_FAILURE);
   }
-  
+
   token = strtok(line, tokenizer_delimeters);
-  while(token != NULL)
+  while (token != NULL)
   {
     tokens[position] = token;
     position++;
 
-    if (position >= buffer_size) 
+    if (position >= buffer_size)
     {
       buffer_size += tokenizer_buffer_chunk_size;
       tokens = realloc(tokens, buffer_size * sizeof(char*));
-      if (!tokens) 
+      if (!tokens)
       {
         fprintf(stderr, "lsh: allocation error\n");
         exit(EXIT_FAILURE);
@@ -57,17 +57,17 @@ char ** oshTokenizeLine(char * line)
   return tokens;
 }
 
-char * oshReadLine(void) 
+char * oshReadLine(void)
 {
   char * line        = NULL;
-  size_t buffer_size = 0; 
+  size_t buffer_size = 0;
 
   if (getline(&line, &buffer_size, stdin) == -1){
-    if (feof(stdin)) 
+    if (feof(stdin))
     {
       exit(EXIT_SUCCESS);
-    } 
-    else  
+    }
+    else
     {
       perror("readline");
       exit(EXIT_FAILURE);
@@ -81,16 +81,16 @@ char * oshReadLine(void)
 
 void oshLoop(void)
 {
-  char *  line; 
+  char *  line;
   char ** tokens;
   DEBUG_PRINT("Starting the main shell loop\n");
-  while(1) 
-  { 
+  while (TRUE)
+  {
     printf("osh > ");
     line = oshReadLine();
     tokens = oshTokenizeLine(line);
 
-    if (strcmp(tokens[0],"exit") == 0)
+    if (strcmp(tokens[0], "exit") == 0)
     {
       free(tokens);
       free(line);
@@ -105,13 +105,13 @@ void oshLoop(void)
 
 int main(int argc, char *argv[])
 {
-  // Init 
+  // Init
   DEBUG_PRINT("Initialised the shell\n");
-    
+
   oshLoop();
 
   // Clean
   DEBUG_PRINT("Cleaning and closing the shell\n");
-  
+
   return EXIT_SUCCESS;
 }
