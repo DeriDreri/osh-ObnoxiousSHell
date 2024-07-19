@@ -13,7 +13,7 @@ help:
 	@echo "make clean - clean the project"
 	@echo '------------------------------------------------------'
 
-debug: CFLAGS += -DDEBUG -g
+debug: CFLAGS += -DDEBUG -g -fsanitize=address
 debug: $(TARGET_DIR)/$(TARGET)
 	@./$(TARGET_DIR)/$(TARGET)
 
