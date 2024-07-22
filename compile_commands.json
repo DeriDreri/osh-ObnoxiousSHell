@@ -1,0 +1,18 @@
+[
+  {
+    "arguments": [
+      "/usr/bin/gcc",
+      "-c",
+      "-Wall",
+      "-Wextra",
+      "-pedantic",
+      "-Iinclude",
+      "-o",
+      "build/osh",
+      "src/main.c"
+    ],
+    "directory": "/home/deri/Programming/obnoxiousShell",
+    "file": "/home/deri/Programming/obnoxiousShell/src/main.c",
+    "output": "/home/deri/Programming/obnoxiousShell/build/osh"
+  }
+]
