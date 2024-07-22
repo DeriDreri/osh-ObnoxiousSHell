@@ -6,12 +6,44 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <unistd.h>
+#include <sys/wait.h>
 
 #include <osh/global.h>
 
 const uint32_t  tokenizer_buffer_chunk_size  = 64;
 const char *    tokenizer_delimeters         = " \t\r\n\a";
 const uint32_t  size_of_buffer_chunk         = 1024;
+
+int osh_launch(char **args)
+{
+  pid_t pid;
+  pid_t wpid;
+  int   status;
+
+  pid = fork();
+  if (0 == pid)
+  {
+    if (-1 == (execvp(args[0], args)))
+    {
+      perror("osh");
+    }
+  exit(EXIT_FAILURE);
+  }
+  else if (pid < 0)
+  {
+    perror("osh");
+  }
+  else
+  {
+    do
+    {
+      wpid = waitpid(pid, &status, WUNTRACED);
+    } while (!WIFEXITED(status) && !WIFSIGNALED(status));
+  }
+  return 1;
+}
+
 
 char ** oshTokenizeLine(char * line)
 {
@@ -22,7 +54,7 @@ char ** oshTokenizeLine(char * line)
 
   if (!tokens)
   {
-    fprintf(stderr, "lsh: allocation error\n");
+    fprintf(stderr, "osh: allocation error\n");
     exit(EXIT_FAILURE);
   }
 
@@ -38,17 +70,19 @@ char ** oshTokenizeLine(char * line)
       tokens = realloc(tokens, buffer_size * sizeof(char*));
       if (!tokens)
       {
-        fprintf(stderr, "lsh: allocation error\n");
+        fprintf(stderr, "osh: allocation error\n");
         exit(EXIT_FAILURE);
       }
     }
     token = strtok(NULL, tokenizer_delimeters);
   }
-  DEBUG_PRINT("Passed tokens\n");
-  DEBUG_PRINT2("\tFirst token: %s\n", tokens[0]);
-  DEBUG_PRINT2("\tLast token: %s\n", tokens[position-1]);
 
   tokens[position] = NULL;
+
+  DEBUG_PRINT("Passed tokens\n");
+  DEBUG_PRINT2("\tFirst token: %s\n", tokens[0] != NULL ? tokens[0] : "NULL");
+  DEBUG_PRINT2("\tLast token: %s\n", tokens[0] != NULL ? tokens[position-1] : "NULL");
+
   return tokens;
 }
 
@@ -85,13 +119,19 @@ void oshLoop(void)
     line = oshReadLine();
     tokens = oshTokenizeLine(line);
 
+    if (tokens[0] == NULL) 
+    {
+      free(tokens);
+      free(line);
+      continue;
+    }
     if (strcmp(tokens[0], "exit") == 0)
     {
       free(tokens);
       free(line);
       break;
     }
-
+    osh_launch(tokens);
     free(tokens);
     free(line);
   }
