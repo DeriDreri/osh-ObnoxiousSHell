@@ -11,6 +11,8 @@ A hobbyist project for practice of C and practical accustomization with inner wo
 - Linux environment
 - GCC (developed with version 13.3.1, minmal supported version not tested)
 - Make (developed with version 3.3.1, minimal supported version not tested)
+### Optional
+- Cpplint (developed with 1.6.1) 
 
 ## Building project 
 
