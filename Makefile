@@ -1,6 +1,6 @@
 TARGET = osh
 TARGET_DIR = build
-SRC = src/main.c
+SRC = $(wildcard src/*.c)
 INCLUDE = include
 CC = gcc
 CCFLAGS = -Wall -Wextra -pedantic

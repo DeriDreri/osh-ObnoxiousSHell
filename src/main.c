@@ -10,12 +10,13 @@
 #include <sys/wait.h>
 
 #include <osh/global.h>
+#include <osh/builtin.h>
 
 const uint32_t  tokenizer_buffer_chunk_size  = 64;
 const char *    tokenizer_delimeters         = " \t\r\n\a";
 const uint32_t  size_of_buffer_chunk         = 1024;
 
-int osh_launch(char **args)
+int osh_launch(char ** args)
 {
   pid_t pid;
   pid_t wpid;
@@ -44,6 +45,23 @@ int osh_launch(char **args)
   return 1;
 }
 
+int osh_execute(char ** args)
+{
+  if (NULL == args[0])
+  {
+    return 1;
+  }
+
+  for (int i = 0; i < oshCountBuiltins(); i++)
+  {
+    if (strcmp(args[0], builtint_names[i]) == 0)
+    {
+      return (*builtint_functions[i])(args);
+    }
+  }
+
+  return osh_launch(args);
+}
 
 char ** oshTokenizeLine(char * line)
 {
@@ -81,7 +99,9 @@ char ** oshTokenizeLine(char * line)
 
   DEBUG_PRINT("Passed tokens\n");
   DEBUG_PRINT2("\tFirst token: %s\n", tokens[0] != NULL ? tokens[0] : "NULL");
-  DEBUG_PRINT2("\tLast token: %s\n", tokens[0] != NULL ? tokens[position-1] : "NULL");
+  DEBUG_PRINT2("\tLast token: %s\n", tokens[0] != NULL ?
+                                     tokens[position-1] :
+                                     "NULL");
 
   return tokens;
 }
@@ -112,26 +132,22 @@ void oshLoop(void)
 {
   char *  line;
   char ** tokens;
+  int     status = 1;
+
   DEBUG_PRINT("Starting the main shell loop\n");
-  while (TRUE)
+  while (status)
   {
     printf("osh > ");
     line = oshReadLine();
     tokens = oshTokenizeLine(line);
 
-    if (tokens[0] == NULL) 
+    if (tokens[0] == NULL)
     {
       free(tokens);
       free(line);
       continue;
     }
-    if (strcmp(tokens[0], "exit") == 0)
-    {
-      free(tokens);
-      free(line);
-      break;
-    }
-    osh_launch(tokens);
+    status = osh_execute(tokens);
     free(tokens);
     free(line);
   }
@@ -144,7 +160,7 @@ int main(int argc, char *argv[])
   #ifndef DEBUG
     // Clean screen
     printf("\033[2J");
-    // Put cursor on top  
+    // Put cursor on top
     printf("\033[0;0H");
     // Change color to bold red
     printf("\033[1;31m");

@@ -1,5 +1,4 @@
-#ifndef _OSH_GLOBAL_H
-#define _OSH_GLOBAL_H
+#pragma once
 
 #define TRUE 1
 #define FALSE 0
@@ -10,6 +9,4 @@
 #else
   #define DEBUG_PRINT(x) {}
   #define DEBUG_PRINT2(x, y) {}
-#endif
-
 #endif
