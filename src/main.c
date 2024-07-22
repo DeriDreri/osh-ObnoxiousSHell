@@ -141,12 +141,22 @@ void oshLoop(void)
 int main(int argc, char *argv[])
 {
   // Init
+  #ifndef DEBUG
+    // Clean screen
+    printf("\033[2J");
+    // Put cursor on top  
+    printf("\033[0;0H");
+    // Change color to bold red
+    printf("\033[1;31m");
+  #endif /* ifndef DEBUG */
+
   DEBUG_PRINT("Initialised the shell\n");
 
   oshLoop();
 
   // Clean
   DEBUG_PRINT("Cleaning and closing the shell\n");
-
+  // Reset the terminal option
+  printf("\033[0m");
   return EXIT_SUCCESS;
 }

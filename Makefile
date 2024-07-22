@@ -3,7 +3,7 @@ TARGET_DIR = build
 SRC = src/main.c
 INCLUDE = include
 CC = gcc
-CFLAGS = -Wall -Wextra -pedantic
+CCFLAGS = -Wall -Wextra -pedantic
 
 help:
 	@echo '------------------------------------------------------'
@@ -13,7 +13,7 @@ help:
 	@echo "make clean - clean the project"
 	@echo '------------------------------------------------------'
 
-debug: CFLAGS += -DDEBUG -g -fsanitize=address
+debug: CCFLAGS += -DDEBUG -g -fsanitize=address
 debug: $(TARGET_DIR)/$(TARGET)
 	@./$(TARGET_DIR)/$(TARGET)
 
@@ -27,4 +27,4 @@ clean:
 	@rm $(TARGET_DIR)/*
 
 $(TARGET_DIR)/$(TARGET): $(SRC)
-	$(CC) -o $(TARGET_DIR)/$(TARGET) $(DFLAGS) $(CFLAGS) -I$(INCLUDE) $(SRC)
+	$(CC) -o $(TARGET_DIR)/$(TARGET) $(CCFLAGS) -I$(INCLUDE) $(SRC)
