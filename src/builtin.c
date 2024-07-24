@@ -7,11 +7,15 @@
 
 #include <osh/builtin.h>
 #include <osh/global.h>
+#include <ringBuffer.h>
+
+extern RingBuffer * history;
 
 char const * const builtint_names[] =
 {
     "cd",
     "help",
+    "history",
     "exit"
 };
 
@@ -19,8 +23,15 @@ int (* const builtint_functions[])(char **) =
 {
   &osh_cd,
   &osh_help,
+  &osh_history,
   &osh_exit
 };
+
+int osh_history(char ** args)
+{
+  printRingBuffer(history);
+  return 1;
+}
 
 int oshCountBuiltins(void)
 {

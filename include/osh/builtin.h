@@ -3,6 +3,7 @@
 int osh_cd(char ** args);
 int osh_help(char ** args);
 int osh_exit(char ** args);
+int osh_history(char ** args);
 
 extern char const * const builtint_names[];
 
