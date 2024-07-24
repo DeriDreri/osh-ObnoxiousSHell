@@ -11,13 +11,13 @@
 
 #include <osh/global.h>
 #include <osh/builtin.h>
-#include <ringBuffer.h>
+#include <historyBuffer.h>
 
 const uint32_t  tokenizer_buffer_chunk_size  = 64;
 const char *    tokenizer_delimeters         = " \t\r\n\a";
 const uint32_t  size_of_buffer_chunk         = 1024;
 
-RingBuffer * history;
+HistoryBuffer * history;
 
 int osh_launch(char ** args)
 {
@@ -63,7 +63,7 @@ int osh_execute(char ** args)
     }
   }
 
-  writeRingBuffer(history, args[0]);
+  HistoryBuffer_write(history, args[0]);
 
   return osh_launch(args);
 }
@@ -171,7 +171,7 @@ int main(int argc, char *argv[])
     printf("\033[1;31m");
   #endif /* ifndef DEBUG */
 
-  history = initRingBuffer(STARTING_HISTORY_SIZE);
+  history = HistoryBuffer_init(STARTING_HISTORY_SIZE);
 
   DEBUG_PRINT("Initialised the shell\n");
 
@@ -181,6 +181,6 @@ int main(int argc, char *argv[])
   DEBUG_PRINT("Cleaning and closing the shell\n");
   // Reset the terminal option
   printf("\033[0m");
-  destroyRingBuffer(history);
+  HistoryBuffer_destroy(history);
   return EXIT_SUCCESS;
 }

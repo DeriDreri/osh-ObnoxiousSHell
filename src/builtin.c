@@ -7,9 +7,9 @@
 
 #include <osh/builtin.h>
 #include <osh/global.h>
-#include <ringBuffer.h>
+#include <historyBuffer.h>
 
-extern RingBuffer * history;
+extern HistoryBuffer * history;
 
 char const * const builtint_names[] =
 {
@@ -29,7 +29,7 @@ int (* const builtint_functions[])(char **) =
 
 int osh_history(char ** args)
 {
-  printRingBuffer(history);
+  HistoryBuffer_print(history);
   return 1;
 }
 
