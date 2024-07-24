@@ -24,14 +24,15 @@ The executable should be created as `build/osh`
 
 ## Project's status
 
-As of 22th July 2024
-- Finished the part supported by the tutorial, now the advneture begins
+As of 24th July 2024
+- Implemented basic history features, hooray!  
+- Added bunch of issues, mostly as my own notes and ideas, as it's helpful to put your thoughts in words like you were trying to explain it to someone else. May add contribution rules if there will be any interest with the issues, but not anticipating such.
 - Currently thinking about following non-functional improvements:
   * Improving Makefile to introduce compiling to objects and then linking to shorten compilation (it doesn't take long yet though)
   * Implementing unit tests
   * Refractoring parts of the code to implement more debug messages and fixing functions names
 - Currently thinking about following functional improvements:
   * Correctly recognizing parentheses for whitespace termination
+  * Globbing
   * Implementing detection of special keys (arrows, TAB, CTRL+C, CTRL+D)
-  * Adding commands history
   * Playing with ASCII control characters
