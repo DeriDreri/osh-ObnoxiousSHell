@@ -50,9 +50,10 @@ void HistoryBuffer_write(HistoryBuffer * historyBuffer, char * value)
     free(historyBuffer->buffer[current_position]);
   }
 
-  historyBuffer->buffer[current_position] = malloc((strlen(value) + 1)
+  uint32_t string_length = strlen(value) + 1;
+  historyBuffer->buffer[current_position] = malloc((string_length+ 1)
                                                     * sizeof(char));
-  strcpy(historyBuffer->buffer[current_position], value);
+  snprintf(historyBuffer->buffer[current_position], string_length, "%s", value);
   historyBuffer->counts[current_position] =
                       historyBuffer->counts[previous_position] + 1;
 
