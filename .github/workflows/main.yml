@@ -14,8 +14,8 @@ on:
       - synchronize
   push:
     branches:
-      - main
-      - 'releases/*'
+      - master
+      - '*'
 
 jobs:
   check-commit-message:
